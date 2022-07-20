@@ -10,11 +10,27 @@ set -e
 
 function main {
 
-    if [[ "$MSYSTEM" == "MINGW32" ]]; then
+    case $MSYSTEM in
+    MINGW32)
         local MSYS2_ARCH="i686"
-    else
+        ;;
+    MINGW64)
         local MSYS2_ARCH="x86_64"
-    fi
+        ;;
+    CLANG32)
+        local MSYS2_ARCH="clang-i686"
+        ;;
+    CLANG64)
+        local MSYS2_ARCH="clang-x86_64"
+        ;;
+    CLANGARM64)
+        local MSYS2_ARCH="clang-aarch64"
+        ;;    
+    *)
+        echo -n "Unsupported architecture: $MSYSTEM"
+        exit -1
+        ;;
+    esac
 
     pacman --noconfirm -Suy
 
